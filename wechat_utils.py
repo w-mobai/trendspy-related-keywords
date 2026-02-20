@@ -104,7 +104,8 @@ class WeChatManager:
                                     enableCmdQR=2,
                                     statusStorageDir=self._itchat_pkl,
                                     loginCallback=self._on_login,
-                                    exitCallback=self._on_logout)
+                                    exitCallback=self._on_logout,
+                                    qrCallback=lambda uuid, status, qrcode: print(f"\n扫码状态: {status}\n提示: 扫码后请在30秒内点击手机上的'登录'按钮\n"))
                     self._logged_in = True
                     logging.info("WeChat logged in successfully")
                     return True

@@ -363,14 +363,17 @@ if __name__ == "__main__":
                       help='测试时要查询的关键词列表，如果不指定则使用配置文件中的关键词')
     args = parser.parse_args()
 
-    # 检查邮件配置
-    if not all([
-        EMAIL_CONFIG['sender_email'],
-        EMAIL_CONFIG['sender_password'],
-        EMAIL_CONFIG['recipient_email']
-    ]):
-        logging.error("Please configure email settings in config.py before running")
-        exit(1)
+    # 检查邮件配置（仅在需要邮件通知时检查）
+    if NOTIFICATION_CONFIG['method'] in ['email', 'both']:
+        if not all([
+            EMAIL_CONFIG['sender_email'],
+            EMAIL_CONFIG['sender_password'],
+            EMAIL_CONFIG['recipient_email']
+        ]):
+            logging.warning("Email notification is enabled but email settings are not configured")
+            logging.warning("Data will be saved locally but no email notifications will be sent")
+    else:
+        logging.info("Email notification is disabled, data will be saved locally only")
     
     # 如果是测试模式
     if args.test:
